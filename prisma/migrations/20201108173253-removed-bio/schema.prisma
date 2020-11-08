@@ -1,0 +1,35 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "sqlite"
+  url = "***"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  firstName String
+  lastName  String
+  profile   Profile? @relation(fields: [profileId], references: [id])
+  profileId Int?
+}
+
+model Distance {
+  id      Int       @id @default(autoincrement())
+  name    String
+  metres  Int
+  Profile Profile[]
+}
+
+model Profile {
+  id         Int      @id @default(autoincrement())
+  distance   Distance @relation(fields: [distanceId], references: [id])
+  time       Float
+  User       User[]
+  distanceId Int
+}

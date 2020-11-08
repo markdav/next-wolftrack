@@ -1,65 +1,79 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import Layout from '../components/layout';
+import styles from '../styles/Home.module.css';
+import Link from 'next/link';
+import {useQuery} from 'react-query';
+
+export const getStaticProps = async(context) => {
+  return {
+    props: {
+      content: "Good Dog",
+    }
+  }
+}
+
+async function getUserProfile(){
+  const res = await fetch('http://localhost:3000/api/user')
+  return await res.json();
+}
 
 export default function Home() {
+  const {isLoading, error, data} = useQuery('user', getUserProfile);
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main className={styles.main}>
+    <Layout>
+      <div>      
+      <p className={styles.description}>
+          <img src='/wolfpack-logo.png'></img>
+        </p>
         <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
+          Welcome { data?.user.firstName} to <Link href="/"><a>Wolftrack!</a></Link>
         </h1>
 
         <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
+          The home of good training!
         </p>
 
         <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
+          <a href="/profile" className={styles.card}>
+            <h3>My Profile&rarr;</h3>
+            <p>Update details about your training data.</p>
+          </a>
+          
+          <a href="/plan" className={styles.card}>
+            <h3>My Plan &rarr;</h3>
+            <p>View your training plan!</p>
           </a>
 
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
+          <a href="/log" className={styles.card}>
+            <h3>My Training Log&rarr;</h3>
+            <p>View your progress versus your plan.</p>
+          </a>          
+
+          <a
+            href="/athletes"
+            className={styles.card}
+          >
+            <h3>Athletes  &rarr;</h3>
+            <p>Manage the athletes you coach.</p>
           </a>
 
           <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
+            href="/clubs"
             className={styles.card}
           >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
+            <h3>Clubs &rarr;</h3>
             <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
+              Search for and join Clubs
             </p>
           </a>
-        </div>
-      </main>
 
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
-    </div>
+          <Link href="/about">
+          <a className={styles.card}>
+            <h3>About Wolftrack &rarr;</h3>
+            <p>Learn about Craughwell AC's Wolfpack tracking app</p>
+          </a>
+          </Link>
+        </div>
+      </div>
+    </Layout>
   )
 }

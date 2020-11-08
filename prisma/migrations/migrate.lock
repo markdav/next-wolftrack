@@ -1,0 +1,5 @@
+# Prisma Migrate lockfile v1
+
+20201104112619-initial-db-migration
+20201108173104-added-bio
+20201108173253-removed-bio
